@@ -1,0 +1,72 @@
+// Arquivos Secretos 03 — Hexatombe parte 2 (mais poderes, itens, aliados e regras opcionais).
+const {P,PP,T,I}=require('./h');
+const AL=(id,nome,desc,bonus,habilidade,x={})=>({id,nome,desc,bonus,habilidade,...x});
+const SAC=(nome,desc,estigma)=>P('geral',nome,desc,'ser o sacrifício '+estigma+' (Hexatombe)',[],{id:'sac_'+require('./h').slug(nome),sacrificio:true});
+module.exports={
+poderes:[
+ P('combatente','Guardião da Tropa','Reação e 2 PE: sofre no lugar de um aliado adjacente um ataque ou habilidade de alvo único. Se o ataque errar sua Defesa ou você resistir por completo, recupera 1 SAN. Pode ser pego de novo para alcance curto.','Ataque Especial, Casca Grossa',[],{repetivel:true}),
+ P('combatente','Vitalidade Sofrida','Seus PV iniciais e por NEX passam a ser 24+Vig e 6+Vig (aplica aos níveis já tidos).','Ataque Especial',[{alvo:'pvBase',valor:2},{alvo:'pvNex',valor:2}]),
+ P('ocultista','Flagelo Bem Aproveitado','Poder do Flagelo passa a custar 1 PV por PE.','Escolhido pelo Outro Lado, Poder do Flagelo'),
+ P('ocultista','Recuperação Flagelante','Entre interlúdios, uma vez pode recuperar por outros meios além de descanso os PV gastos com Poder do Flagelo. Repetível até 3 usos.','Escolhido pelo Outro Lado, Poder do Flagelo',[],{repetivel:true}),
+ P('geral','Ambidestria','Empunhando duas armas (uma leve) e agredindo, faz um ataque com cada, com –1d20 nos ataques até o próximo turno. Com Combater com Duas Armas, não sofre penalidade e pode usar duas armas de uma mão.','For 2 ou Agi 2, treinado em Luta'),
+ P('geral','Entrada Triunfal','Uma vez por sessão, ao anunciar sua chegada num ambiente, +1d20 no primeiro teste ali (exceto Furtividade) — ou transfere o bônus a um aliado em alcance longo como reação.','Pre 2'),
+ P('geral','Papinho Sedutor','Em testes de Presença para seduzir, 1 PE para +5; se passar, o alvo fica apaixonado (e pode virar um problema).','Pre 2'),
+ PP('energia','Instrumento Elétrico de Combate','Um instrumento musical que você toca vira permanentemente uma arma tática amaldiçoada de Energia (categoria II, 2 espaços, duas mãos): ataque com Artes contra 1 alvo em alcance curto, 2d8 de Energia + Presença, crítico 20/x2. Só você é proficiente; se quebrar, pode refazer em outro instrumento.','Atinge todos os alvos que escolher em alcance curto.'),
+ PP('conhecimento','Conhecimento de Direção Precognitiva','+5 em Percepção ou Sobrevivência para se orientar até um lugar, mesmo desconhecido.','O bônus vira +10.'),
+ SAC('Causar Culpa','Ação padrão e 3 PE: uma pessoa em alcance curto (Vontade DT Pre+5 evita) revive suas piores lembranças e fica indefesa; repete o teste a cada turno.','da Culpa'),
+ SAC('Arrogância Diabólica','Ação padrão e 3 PE: uma pessoa em alcance médio (Vontade DT Pre+5) faz algo extremamente imprudente no próximo turno; se passar, sofre 2d6 de dano mental irredutível.','do Orgulho'),
+ SAC('Despertar Obsessão','Ação padrão e 3 PE, encarando alguém em alcance curto: se desviar o olhar, fica desprevenido contra você e aliados por 1 rodada; se encarar e falhar em Vontade (DT Pre+5), gasta 1 rodada se aproximando para adorá-lo ou se fere.','da Obsessão'),
+ SAC('Estimular Hedonismo','Ação padrão e 3 PE: uma pessoa em alcance curto (Vontade DT Pre+5 evita) é tomada de prazer e fica indefesa por 1 rodada.','do Prazer'),
+ SAC('Fruto da Ambição','Escolha um poder ou ritual que conheça: usá-lo ativa uma forma suprema como As Máscaras (AS #2).','do Desejo'),
+ SAC('Ódio Suprimido','Ação completa e 3 PE: seres em alcance curto fazem Fortitude e Reflexos (DT Pre+5); falhar em Fortitude: caído e sofre seu dano corpo a corpo; falhar em Reflexos: sofre seu dano à distância. Depois fica exausto até o fim da cena.','do Rancor'),
+],
+trilhas:[
+ T('performatico','Performático','combatente','Trilha geral (combatente, especialista ou ocultista performático): luta como performance cativante em sinergia com a trupe.',[
+  ['Ensaio','Nova ação de interlúdio, ensaiar combate: +1 na margem de ameaça até o próximo interlúdio (+2 em NEX 40%, +3 em 65%, +4 em 99%). Outros podem ensaiar junto e ganhar o mesmo bônus.',[],{interludioAcao:'ensaiar'}],
+  ['Frase de Efeito','Quando você ou um aliado em alcance curto faz um crítico, 2 PE para o multiplicador virar sua Presença (ou +1, se a Presença não for maior).'],
+  ['Mosh Pit','Flanqueando um alvo, você e aliados adjacentes ou flanqueando recebem +1d6 de dano contra ele por aliado cercando (máximo +5d6).'],
+  ['Ritmo Contagiante','No início de um combate, você e aliados em alcance médio recebem +5 Defesa até o fim; cada crítico seu aumenta o bônus em +1.']],{classes:['combatente','especialista','ocultista']}),
+],
+itens:[
+ I('arma','Garra do Harpia',1,2,{dano:'2d8',critico:'19',alcance:'curto',tipoDano:'Corte',proficiencia:'tatica',empunhadura:'duas',forma:'corpo',agil:true,arremesso:true,desc:'Rastelo ágil de duas mãos, arremessável. Ao causar dano, 2 PE para agarrar o alvo como ação livre. Conta como arma leve de uma mão para Combater com Duas Armas. Item único.'}),
+ I('geral','Bloody Mary Batizada',2,1,{consumivel:true,desc:'Beber remove uma condição mental e/ou de medo, mas causa 2d4 de dano mental.'}),
+ I('geral','Paçoca',0,0.5,{consumivel:true,desc:'Conta como prato rápido. Em ocasiões especiais, uma vez por dia, recupera 1d8+1 PV, PE e SAN.'}),
+ I('paranormal','Crânio Dominador',3,1,{desc:'Empunhado, ação padrão e 2 PE: correntes prendem até dois alvos em alcance curto, paralisados (Reflexos DT Pre evita) até romper a corrente (Defesa 10, RD 10, 20 PV). Recarrega em 24 horas.'}),
+ I('paranormal','Gaiola do Corvo',4,2,{desc:'Ação padrão para pousá-la e abri-la: o chão num raio de 18m vira Lodo (terreno difícil) e quem estiver nele sofre 3d10 de Morte a cada rodada (Fortitude DT Vig reduz à metade). Quem ficar morrendo ali é consumido e a gaiola se fecha.'}),
+ I('amaldicoado','Camiseta Psikolera',2,1,{elemento:'sangue',desc:'Vestimenta: enquanto machucado, todas as suas rolagens de dano causam +2d8 de Sangue.'}),
+ I('amaldicoado','Dupla Obsessiva',3,2,{elemento:'sangue',dano:'2d4+1d6',critico:'x3',tipoDano:'Perfuração + Sangue',proficiencia:'tatica',empunhadura:'uma',forma:'corpo',desc:'Maça (2d4 perfuração +1d6 Sangue, x3) e florete ágil (1d6 perfuração +2d4 Sangue, 18/x2). Com as duas, ação padrão para um ataque com cada. Reação e 2 PE: vira o alvo de um ataque contra aliado em alcance curto; se o atacante estiver adjacente, mais 2 PE para atacá-lo com a maça.'}),
+ I('protecao','Armadura de Guevara',3,0,{elemento:'sangue',amaldicoado:true,defesa:10,pesada:true,desc:'Proteção pesada amaldiçoada de Sangue que dispensa proficiência e não ocupa espaço. Defesa +10 (+1 por semana usando, até +20). RD balístico, impacto e perfuração 5 e Sangue 10; vulnerável a Morte. Tocar exige Vontade (DT 6d6) ou a veste; vestida, Fortitude (DT 6d6) ou o Sangue pode controlá-lo. Testes repetidos a cada semana ou missão.'}),
+],
+aliados:[
+ AL('ana','Ana','Combatente sanguinária, apaixonada e fiel (Couraças).','Ataques corpo a corpo causam +1 dado de dano do mesmo tipo.','Dupla Empunhadura: 1 PE para usar Combater com Duas Armas (ou sem a penalidade de –1d20, se já tiver).',{habPE:1}),
+ AL('argano','Argano','Amante leal, obstinado e forte (Couraças).','Sempre que causa dano, +1d12 de perfuração.','Cobertura Viva: 1 PE para cobertura leve até você se mover.',{habPE:1}),
+ AL('chispa','Chispa','Inteligente, rápido e cheio de traquitanas (Couraças).','+9m de deslocamento.','Traquitana Explosiva: uma vez por combate, 1 PE para receber uma granada.',{bonusEf:{deslocamento:9},habPE:1}),
+ AL('escarlata','Escarlata','Sedutora e manipuladora (Couraças).','+5 em testes para proteger ou beneficiar Escarlata.','A Dor do Amor: perca 1d8+1 PV para receber 10 PE temporários.',{habPeTemp:10}),
+ AL('torvo','Torvo','Fonte de sofrimento para o Outro Lado (Couraças).','Rituais de Sangue dispensam componentes e custam –1 PE.','Catalisador Vivo: ao conjurar ritual de Sangue, 1 PE para aplicar o efeito de um catalisador.',{habPE:1}),
+ AL('coruja','Coruja','Esperta e observadora (Pássaros).','Treinado em duas perícias de Intelecto à escolha.','Olhos Treinados: ao atacar, 2 PE para ignorar cobertura e camuflagem leves.',{bonusEf:{treinaEscolha:2},habPE:2}),
+ AL('corvo_aliado','Corvo','Ocultista fascinado pelo fim de todas as coisas (Pássaros).','Uma vez por cena, um dano que o deixaria com 0 PV o deixa com 1 PV.','Pela Hora da Morte: uma vez por rodada, 2 PE para todos os seres machucados que escolher perderem 1d8 PV.',{habPE:2}),
+ AL('harpia','Harpia','Líder atento que cuida dos companheiros (Pássaros).','Não fica desprevenido contra inimigos que não vê e rola de novo a chance de falha por camuflagem.','Aves de Rapina: 2 PE ao atacar para deixar o alvo desprevenido.',{habPE:2}),
+ AL('papagaio','Papagaio','Malandro que se vira em qualquer situação (Pássaros).','Recupera 1d6 PE no fim de cada interlúdio.','Meter o Migué: uma vez por cena, 2 PE para trocar o atributo de um teste de perícia.',{interludioPE:'1d6',habPE:2}),
+ AL('pomba','Pomba','Explorador urbano e da natureza (Pássaros).','Treinado em Crime e Sobrevivência (ou +2 se já for).','Atalhos em Todo Lugar: uma vez por rodada, 2 PE para uma ação de movimento extra só para se deslocar.',{bonusEf:{treina:['crime','sobrevivencia']},habPE:2}),
+ AL('ale','Alê','Intuição profética, sabe o que pode dar errado (Psikolera).','Uma vez por cena, rola um teste de novo e fica com o melhor.','Prever Resultados: uma vez por missão, 2 PE para rolar e anotar 2d20, que podem substituir o maior d20 de qualquer teste até o fim da missão.',{habPE:2}),
+ AL('caio','Caio','Faz estardalhaço para distrair (Psikolera).','+1d20 em Furtividade.','Barulheira: uma vez por cena, 1 PE: testes de inimigos que não tenham Caio como único alvo sofrem –1d20.',{bonusEf:{dadosPer:{furtividade:1}},habPE:1}),
+ AL('cindy','Cindy','Arma o palco e move as cordas (Psikolera).','+5 em Diplomacia, Enganação e Intimidação (exceto contra ela).','Tiro de Aviso: ao acertar um ataque, 2 PE para +2d8 de dano balístico.',{bonusEf:{per:{diplomacia:5,enganacao:5,intimidacao:5}},habPE:2,habDado:'2d8'}),
+ AL('eloy','Eloy','Baterista capaz de esmagar crânios (Psikolera).','Resistência a dano 5.','Porrada Rítmica: uma vez por rolagem de dano, 1 PE para rolar de novo todos os 1 e 2.',{habPE:1}),
+ AL('franco','Franco','Fanático por fogo e explosivos (Psikolera).','+1d20 para quebrar objetos e +1d6 de dano neles.','Fogo em Geral: 1 PE ao atacar para deixar o alvo em chamas.',{habPE:1}),
+ AL('corvo_animal','Corvo (animal)','Ave inteligente e treinada.','+2 em Percepção e Sobrevivência.','Ataque os Olhos: ao causar dano, 1 PE para deixar o alvo ofuscado 1 rodada (cego num crítico).',{bonusEf:{per:{percepcao:2,sobrevivencia:2}},habPE:1,animal:true}),
+ AL('gato','Gato (animal)','Felino ágil e independente.','+2 em Percepção e Reflexos.','Visão Noturna: na escuridão comum, 1 PE para ter visão na penumbra até o fim da cena.',{bonusEf:{per:{percepcao:2,reflexos:2}},habPE:1,animal:true}),
+ AL('serpente','Serpente (animal)','Réptil peçonhento.','+2 em Enganação e Intimidação.','Peçonhenta: ao causar dano, 1 PE para o alvo perder 1d12 PV por veneno.',{bonusEf:{per:{enganacao:2,intimidacao:2}},habPE:1,animal:true}),
+],
+condicoes:[
+ {id:'apaixonado',nome:'Apaixonado',desc:'Sofre penalidade em todos os testes contra a pessoa amada igual à soma dos PV e PE recebidos numa relação íntima com ela.',tipo:'mental',efeitos:{}},
+ {id:'tremulo',nome:'Trêmulo',desc:'Nervoso e com tremeliques: –1d20 em testes baseados em Força e Vigor.',tipo:'mental',efeitos:{dados:{FOR:-1,VIG:-1}}},
+],
+regras:[
+ {id:'trilha_geral',nome:'Trilha geral (Performático)',desc:'A trilha Performático pode ser escolhida por combatentes, especialistas e ocultistas.',efeito:{trilhaGeral:true}},
+ {id:'batalha_intencoes',nome:'Batalhas de intenções',desc:'Duas pessoas em duelo de intenções: cada uma causa +1d10 de dano do mesmo tipo à outra e reduz à metade qualquer dano que não venha do rival.'},
+ {id:'trocas_recursos',nome:'Trocas de recursos e tempo de base',desc:'Informações custam 1 recurso (água, comida ou sucata) e segredos 3. Construir uma melhoria de base leva 7 dias para 1 pessoa, –1 dia por ajudante (mínimo 3).'},
+ {id:'jogos_circo',nome:'Jogos do circo',desc:'Dardos: três testes de Pontaria (DT 10/15/20/25/30 = 5/10/15/25/50 pontos). Máquina de soco: dano desarmado ×100 (pode gastar PV ou PE até o limite de PE, 2 por +2 de dano). Boas recordações: recupera 1d4 PV, PE ou SAN e, uma vez por missão, olhar a foto dá +1d6 num teste até o fim do dia.'},
+ {id:'veiculos_operacionais',nome:'Veículos operacionais',desc:'Deslocamento de manobra por teste de Pilotagem no início da cena (DT 5: 15m … DT 30: 30m). Regalias: arsenal secreto (3 itens por missão), aprimoramentos de velocidade (+5 Pilotagem), bancos reclináveis (descanso confortável), estação de trabalho (+2 numa perícia), janelas blindadas (+5 RD), lataria reforçada (+5 Defesa, duas vezes), para-choques letais, quadro de investigação (+5 em revisar caso), tração nas quatro rodas. Combustível em 5d6 (remove os 1 a cada percurso). Direção combativa, colisão (1d6 por 1,5m), disparos em movimento (–1d20), manobras evasivas, dano massivo com defeitos (1d8) e reparo no interlúdio por Profissão (DT 10 a 30).'},
+ {id:'animais_treinados',nome:'Animais treinados',desc:'Pets precisam de treinamento (uma folga dedicada a eles). Podem ser aliados animais (corvo, gato, serpente) ou ter ficha de ameaça com VD pelo NEX do dono (NEX 10%: VD 10; 15%: 20; depois +20 a cada 5%, até VD 360).'},
+],
+};
